@@ -1,0 +1,906 @@
+{
+  "name": "Apollo Data MMTI Email Marketing WorkflowFlow1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "60108809-7cd4-4766-bfa8-6bac519a23e4",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk",
+          "mode": "list",
+          "cachedResultName": "Appolo Construction Companies data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 392706570,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk/edit#gid=392706570"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f22024f9-c42b-4c59-bab6-bb42ba2594df",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3DmFuPwNxjSlpTSr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "73e8fbbf-972b-4bad-969a-fb1fdc9007d6",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "Scrape single URL",
+        "url": "={{ $json.Website }}"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        624,
+        -160
+      ],
+      "id": "46923528-4a91-4970-aa7b-b8415722fae4",
+      "name": "Scrape single URL",
+      "retryOnFail": true,
+      "credentials": {
+        "apifyApi": {
+          "id": "PZpHwIMpU6yGieHj",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Lead Qualification Assistant for MMTI Chartered Accountants & Tax Advisers, a UK-based accounting and tax advisory firm.\n\nTASK\n\nAnalyze the provided UK construction/property company website data and determine whether the company could be a relevant prospect for MMTI.\n\nIMPORTANT:\nYou must ONLY use information explicitly available in the WEBSITE DATA.\n\nDo not invent, assume, or infer specific facts that are not stated.\n\nMMTI SERVICES\n\nMMTI provides:\n\n1. Bookkeeping\n2. Payroll\n3. Tax Planning\n4. VAT\n5. CIS (Construction Industry Scheme)\n6. Franchise Accounting\n7. Year End Accounting\n\nANALYSIS\n\nReview the website data and identify evidence relating to:\n\n- Construction activities\n- Property activities\n- Contractor or subcontractor activities\n- CIS-related activities\n- Employees or workers\n- Self-employed workers or subcontractors\n- Multiple projects\n- Multiple locations\n- Business expansion or growth\n- Commercial contracts\n- VAT-related activities\n- Turnover or company size, if explicitly stated\n- Number of employees, if explicitly stated\n- Payroll requirements\n- Multiple revenue streams\n- Business complexity\n- Investment in equipment or assets\n- Any other evidence that could indicate accounting or tax support needs\n\nSERVICE MATCHING\n\nOnly include services that have a reasonable connection to evidence found in the website data.\n\nCIS:\nRecommend CIS when the website explicitly shows construction contracting, subcontracting, or other activities where CIS may reasonably apply.\n\nDo NOT state that the company definitely has CIS obligations unless the website explicitly confirms this.\n\nVAT:\nRecommend VAT when the website shows commercial construction/property activities, multiple revenue streams, or other business activity where VAT support may reasonably be relevant.\n\nPayroll:\nRecommend Payroll only when the website explicitly mentions employees, staff, workers, teams, or similar evidence.\n\nBookkeeping:\nRecommend Bookkeeping when the company appears to have active business operations, projects, services, or other ongoing commercial activity.\n\nTax Planning:\nRecommend Tax Planning when the website provides evidence of an established, growing, expanding, investing, or commercially significant business.\n\nYear End Accounting:\nThis may be relevant for an established UK business.\n\nFranchise Accounting:\nONLY recommend Franchise Accounting if the website explicitly indicates that the company operates franchises or is involved in franchising.\n\nNever recommend Franchise Accounting simply because the company is large.\n\nLEAD SCORE\n\nGive a score from 0 to 100.\n\nThe score should represent how relevant and potentially valuable the company appears to be for MMTI.\n\nConsider:\n\n- Construction/property relevance\n- Relevance to MMTI services\n- Evidence of CIS relevance\n- Evidence of VAT complexity\n- Evidence of employees/workers\n- Evidence of growth\n- Evidence of multiple projects\n- Evidence of multiple locations\n- Evidence of business complexity\n- Evidence that professional accounting support could be useful\n\nIMPORTANT SCORING RULE:\n\nDo not give a high score simply because the company sounds large or established.\n\nDo not invent company size, revenue, employees, locations, tax problems, CIS problems, or VAT problems.\n\nIf the website contains very little information, use a conservative score.\n\nREASON\n\nWrite a short explanation of why the company may be a relevant MMTI prospect.\n\nUse only evidence from the website.\n\nConnect the evidence to relevant MMTI services.\n\nDo not make unsupported claims.\n\nOUTREACH ANGLE\n\nCreate a short potential sales angle for MMTI.\n\nFocus on the services that appear most relevant from the website.\n\nFor construction/property businesses, consider:\n\n- CIS\n- VAT\n- Payroll\n- Bookkeeping\n- Tax Planning\n- Year End Accounting\n\nUse cautious language.\n\nGood examples:\n\n\"Based on the company's construction activities, MMTI may be able to support...\"\n\n\"There may be an opportunity to review...\"\n\n\"Given the nature of the company's operations, MMTI could potentially help with...\"\n\nDo NOT say:\n\n\"You have CIS problems.\"\n\n\"You are overpaying tax.\"\n\n\"Your VAT is incorrect.\"\n\n\"You need our services.\"\n\nDo not write the actual cold email.\n\nOUTPUT FORMAT\n\nReturn ONLY valid JSON.\n\nDo not use markdown.\n\nDo not use code fences.\n\nDo not write any explanation before or after the JSON.\n\nDo not add any fields.\n\nUse exactly this JSON structure:\n\n{\n  \"company_name\": \"\",\n  \"industry\": \"\",\n  \"lead_score\": 0,\n  \"potential_services\": [],\n  \"reason\": \"\",\n  \"outreach_angle\": \"\"\n}\n\nJSON RULES\n\n- company_name must be a string.\n- industry must be a string.\n- lead_score must be a number from 0 to 100.\n- potential_services must be an array of strings.\n- reason must be a string.\n- outreach_angle must be a string.\n- Use double quotes for JSON strings.\n- Do not use trailing commas.\n- Do not include newline characters inside JSON string values.\n- Do not include any additional fields.\n- If evidence for a service is weak, do not include that service.\n- Never invent missing information.\n\nWEBSITE DATA\n\n{{ $('Scrape single URL').item.json.markdown }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1136,
+        -160
+      ],
+      "id": "170bb262-e85e-4887-80c6-ac591c71129b",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1392,
+        -304
+      ],
+      "id": "023c68d1-15d2-4960-aad3-e153a52fbe24",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "s9sBTQI24ML9pv30",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const text = $json.text;\n\nconst cleaned = text\n  .replace(/```json/g, '')\n  .replace(/```/g, '')\n  .trim();\n\nconst data = JSON.parse(cleaned);\n\nreturn {\n  json: {\n    company_name: data.company_name,\n    industry: data.industry,\n    lead_score: data.lead_score,\n    potential_services: Array.isArray(data.potential_services)\n      ? data.potential_services.join(', ')\n      : data.potential_services,\n    reason: data.reason,\n    outreach_angle: data.outreach_angle\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        -160
+      ],
+      "id": "12c98460-4610-45f0-b87a-1d78f131a7fa",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        -160
+      ],
+      "id": "c53a15cf-df3c-4405-a4b3-fc332437c8ae",
+      "name": "Wait",
+      "webhookId": "61a18252-b878-410e-b7ae-0c2bb9dd7a3d"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk",
+          "mode": "list",
+          "cachedResultName": "Appolo Construction Companies data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 392706570,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk/edit#gid=392706570"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Lead Score": "={{ $json.lead_score }}",
+            "Company": "={{ $json.company_name }}",
+            "Potential Services": "={{ $json.lead_score }}",
+            "Outreach Angle": "={{ $json.outreach_angle }}",
+            "Website": "={{ $('Loop Over Items').item.json.Website }}",
+            "Email Status": "Draft",
+            "Do Not Contact": "No"
+          },
+          "matchingColumns": [
+            "Website"
+          ],
+          "schema": [
+            {
+              "id": "Sr. No.",
+              "displayName": "Sr. No.",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Designation",
+              "displayName": "Designation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Scraped Data",
+              "displayName": "Scraped Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Lead Score",
+              "displayName": "Lead Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Potential Services",
+              "displayName": "Potential Services",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Outreach Angle",
+              "displayName": "Outreach Angle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Personalized Email",
+              "displayName": "Personalized Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Status",
+              "displayName": "Email Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Approval?",
+              "displayName": "Approval?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Do Not Contact",
+              "displayName": "Do Not Contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1824,
+        -160
+      ],
+      "id": "6de80a3d-f156-4cb2-ab04-1987f034ad00",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3DmFuPwNxjSlpTSr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI email personalization assistant for MMTI Chartered Accountants & Tax Advisers, a UK-based accounting and tax advisory firm.\n\nYour task is to create ONE highly personalised cold outreach email for the decision maker of the company using ONLY the information provided below.\n\nCOMPANY:\n{{ $json.Company }}\nDECISION MAKER:\n{{ $json.Name }}\n\nDESIGNATION:\n{{ $json.Designation }}\n\nWEBSITE:\n{{ $json.Website }}\n\nSCRAPED BUSINESS INFORMATION:\n{{ $json['Scraped Data'] }}\n\nPOTENTIAL SERVICES:\n{{ $json['Potential Services'] }}\n\nOUTREACH ANGLE:\n{{ $json['Outreach Angle'] }}\n\nOBJECTIVE:\n\nWrite a genuine, professional, one-to-one business introduction from MMTI.\n\nThe purpose of the email is to start a conversation with the decision maker about a potentially relevant accounting, tax, payroll, CIS, VAT, or advisory service.\n\nThe email must feel like it was personally written after briefly researching the company.\n\nIt must NOT sound like a mass marketing email, generic sales template, or AI-generated message.\n\nNatural and clear language is more important than sophisticated or impressive wording.\n\nPERSONALISATION:\n\n1. Use the actual business characteristics provided in the supplied information.\n\n2. Use the Potential Services and Outreach Angle to identify the most relevant reason for contacting the company.\n\n3. Where genuinely useful, mention ONE specific and verifiable characteristic of the company's business to explain why MMTI is reaching out.\n\n4. Do not mention a business detail simply to make the email appear personalised. Every detail should have a clear connection to the reason for contacting the company.\n\n5. Address the recipient by their first name where a valid name is provided.\n\n6. Use the company name naturally where appropriate.\n\n7. If the supplied information does not provide enough detail for meaningful personalisation, keep the email simple and relevant rather than inventing details.\n\n8. Never force personalisation.\n\n9. Do not repeat the scraped information unnecessarily.\n\n10. The email should make the recipient feel that the sender understands what their business does and why the particular service may be relevant.\n\nACCURACY AND FACTUAL CONTROL:\n\nUse ONLY information supplied in the input.\n\nDO NOT invent, assume, imply, or speculate about:\n\n* Revenue\n* Turnover\n* Number of employees\n* Number of clients\n* Locations\n* Growth\n* Expansion\n* Business problems\n* Accounting problems\n* Tax problems\n* VAT problems\n* CIS problems\n* Payroll problems\n* Financial performance\n* Current accountant\n* Previous accountant\n* Accounting software\n* Directors' responsibilities\n* Recent events\n* Current services\n* Upcoming projects\n* Business plans\n* Financial goals\n* Compliance issues\n* Tax liabilities\n* Tax savings\n* Any other unsupported fact\n\nDo not state or imply that the company has a problem unless the supplied information explicitly confirms it.\n\nDo not pretend to know something about the company that is not in the supplied information.\n\nUse cautious language where appropriate, such as:\n\n\"I noticed...\"\n\n\"I saw that...\"\n\n\"It looks like...\"\n\n\"There may be an opportunity...\"\n\n\"We may be able to help...\"\n\n\"I wondered whether...\"\n\n\"It could be worth a conversation...\"\n\nSERVICE RELEVANCE:\n\nChoose the MOST relevant service from the supplied Potential Services and Outreach Angle.\n\nDo not mention multiple unrelated services just because MMTI offers them.\n\nIf VAT is the relevant opportunity, focus primarily on VAT.\n\nIf bookkeeping is the relevant opportunity, focus primarily on bookkeeping.\n\nIf year-end accounts are relevant, focus primarily on accounts.\n\nIf CIS is relevant, focus primarily on CIS.\n\nIf payroll is relevant, focus primarily on payroll.\n\nIf tax or advisory support is relevant, focus on the specific relevant area.\n\nOnly mention additional services if they naturally support the main reason for contacting the company.\n\nThe email should have ONE clear commercial reason for reaching out.\n\nMMTI POSITIONING:\n\nPosition MMTI as a professional UK firm of Chartered Accountants & Tax Advisers.\n\nExplain briefly how MMTI may be able to support the company based on the relevant service.\n\nDo not exaggerate MMTI's capabilities.\n\nDo not claim guaranteed savings, tax reductions, increased profits, growth, compliance improvements, or other results unless explicitly supported by the supplied information.\n\nDo not criticise or make assumptions about the company's existing accountant or financial processes.\n\nDo not use aggressive sales language.\n\nDo not make the email sound like an advertisement.\n\nNATURAL LANGUAGE:\n\nWrite like a real UK accountant sending a carefully researched one-to-one business email.\n\nPrioritise:\n\n* Natural wording\n* Clear sentences\n* Simple professional English\n* Human tone\n* Specific relevance\n* Concise communication\n\nAvoid language that sounds generated, overly polished, or corporate.\n\nDo NOT use vague or generic phrases such as:\n\n* \"technical requirements\"\n* \"your industry\"\n* \"your business needs\"\n* \"given your activities\"\n* \"in today's business environment\"\n* \"in the ever-changing landscape\"\n* \"unlock opportunities\"\n* \"drive growth\"\n* \"optimise your business\"\n* \"take your business to the next level\"\n* \"bespoke solutions\"\n* \"tailored solutions\" unless genuinely necessary\n* \"strategic financial support\"\n* \"comprehensive financial solutions\"\n* \"end-to-end solutions\"\n* \"I hope this email finds you well\"\n* \"I wanted to reach out\"\n* \"I am reaching out to explore\"\n* \"I came across your company and was impressed\"\n\nAvoid unnecessary corporate jargon and sales clichés.\n\nDo not use sophisticated wording merely for the sake of sounding professional.\n\nEMAIL STRUCTURE:\n\nThe email should naturally contain:\n\n1. Personalised opening — briefly show why the company caught MMTI's attention.\n\n2. Relevant reason for contacting them — connect the business characteristic to the relevant service.\n\n3. MMTI value — briefly explain how MMTI may be able to help.\n\n4. Low-pressure CTA — invite a short conversation.\n\nUse short paragraphs.\n\nDo not use headings or bullet points inside the email.\n\nKeep the email focused on ONE main reason for contacting the company.\n\nOPENING:\n\nThe opening should be specific and natural.\n\nPrefer:\n\n\"I noticed that Stace works across the property and construction sector...\"\n\nover generic openings such as:\n\n\"I came across your company and wanted to reach out...\"\n\nDo not compliment the company unless there is a genuine, factual reason to do so.\n\nDo not pretend to have personally visited or reviewed the company unless the supplied information supports that statement.\n\nCALL TO ACTION:\n\nEnd with a natural, low-pressure CTA.\n\nPossible examples:\n\n\"Would you be open to a brief conversation to see whether this could be relevant?\"\n\n\"Would it be worth having a short conversation about this?\"\n\n\"If this is something you're considering, would you be open to a brief chat?\"\n\n\"Would you be open to a short conversation to see if we could be of help?\"\n\nChoose the CTA that fits naturally with the email.\n\nDo not use aggressive CTAs such as:\n\n\"Book a call now.\"\n\n\"Schedule a call today.\"\n\n\"Don't miss this opportunity.\"\n\n\"Let's get started.\"\n\nTONE:\n\nUse professional UK business English.\n\nThe tone should be:\n\n* Natural\n* Human\n* Professional\n* Concise\n* Polite\n* Confident\n* Conversational\n* One-to-one\n* Low-pressure\n\nAvoid:\n\n* Excessive marketing language\n* Corporate jargon\n* Sales clichés\n* Generic filler\n* Excessive compliments\n* Fake urgency\n* Overly formal language\n* Emojis\n* Exclamation marks\n* Clickbait\n* Robotic wording\n\nEMAIL LENGTH:\n\nKeep the email body approximately 80–120 words.\n\nDo not make the email longer simply to include more information.\n\nA shorter email is preferable if the same message can be communicated clearly.\n\nThe subject line should be short, natural and specific.\n\nSUBJECT LINE:\n\nGenerate ONE personalised subject line.\n\nSubject requirements:\n\n* Ideally 4–8 words\n* Relevant to the company and outreach angle\n* Natural UK business tone\n* Specific but not overly promotional\n* No emojis\n* No ALL CAPS\n* No fake urgency\n* No exaggerated claims\n* Do not mention AI\n* Do not mention automation\n* Do not mention scraping\n* Do not mention lead score\n* Do not use \"Re:\"\n* Do not use \"Fwd:\"\n* Do not use clickbait\n* Do not use generic subjects such as:\n  \"Business Opportunity\"\n  \"Accounting Services\"\n  \"Our Services\"\n  \"Accounting Support\"\n\nThe subject should feel like a genuine business email rather than a marketing campaign.\n\nSIGNATURE:\n\nDO NOT include any email signature or sender information in the email body.\n\nDO NOT include:\n\n* \"Kind regards\"\n* \"Best regards\"\n* \"Regards\"\n* Sender name\n* Job title\n* Phone number\n* Email address\n* Website\n* Company address\n* Social media links\n\nThe MMTI signature will be added automatically by the n8n workflow when the email is sent.\n\nUNSUBSCRIBE LINE:\n\nDO NOT add an unsubscribe line or opt-out statement.\n\nThe MMTI email workflow will add the appropriate footer automatically.\n\nFINAL QUALITY CHECK:\n\nBefore returning the result, internally verify:\n\n1. Every factual statement is supported by the supplied information.\n2. No assumptions have been made.\n3. The email is genuinely relevant to this specific company.\n4. ONE clear service/opportunity is the main focus.\n5. The email sounds human and naturally written.\n6. The email does not sound like a mass marketing template.\n7. No generic AI-style phrases have been used.\n8. The opening is personalised.\n9. The CTA is low-pressure.\n10. The email is approximately 80–120 words.\n11. There is no signature.\n12. There is no unsubscribe line.\n13. The subject is short and relevant.\n14. The output is valid JSON.\n\nOUTPUT FORMAT:\n\nReturn ONLY valid JSON.\n\nUse EXACTLY this structure:\n\n{\n\"subject\": \"Your personalised subject line\",\n\"email_body\": \"Your personalised email body\"\n}\n\nRules:\n\n* Use exactly the keys \"subject\" and \"email_body\".\n* Do not add any other keys.\n* Do not include markdown.\n* Do not include code fences.\n* Do not include explanations.\n* Do not include comments.\n* Do not include text before or after the JSON.\n* Ensure the response is valid JSON.\n* Escape quotation marks inside the email body if required.\n* The email body must not contain a signature.\n* The email body must not contain an unsubscribe line.\n\nReturn only the JSON object.\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1296,
+        192
+      ],
+      "id": "27c5d935-5f0c-46ad-a678-cb38c13b5231",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        848,
+        192
+      ],
+      "id": "d49eda5b-2a64-42d7-9ece-a80b9f7a209f",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1104,
+        192
+      ],
+      "id": "dbfe7c78-6738-4681-91de-ff6ead252fdc",
+      "name": "Wait1",
+      "webhookId": "ec15c476-599c-487d-9ec1-86a23a96bb01"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1376,
+        368
+      ],
+      "id": "3049e746-143f-44b4-a691-f95cf14019b1",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "s9sBTQI24ML9pv30",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk",
+          "mode": "list",
+          "cachedResultName": "Appolo Construction Companies data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 392706570,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk/edit#gid=392706570"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Wait1').item.json.row_number }}",
+            "Website": "={{ $('Wait1').item.json.Website }}",
+            "Personalized Email": "={{ $json['Email Body'] }}",
+            "Email Subject": "={{ $json['Email Subject'] }}",
+            "Email Status": "Draft"
+          },
+          "matchingColumns": [
+            "Website"
+          ],
+          "schema": [
+            {
+              "id": "Sr. No.",
+              "displayName": "Sr. No.",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Designation",
+              "displayName": "Designation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Scraped Data",
+              "displayName": "Scraped Data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Lead Score",
+              "displayName": "Lead Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Potential Services",
+              "displayName": "Potential Services",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Outreach Angle",
+              "displayName": "Outreach Angle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Personalized Email",
+              "displayName": "Personalized Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Subject",
+              "displayName": "Email Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Status",
+              "displayName": "Email Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Approval",
+              "displayName": "Approval",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1904,
+        192
+      ],
+      "id": "b30fcf6d-62f1-4e8e-93af-6689c7e223c1",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3DmFuPwNxjSlpTSr",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec1193f4-7562-44c9-b53d-a70eb956f252",
+              "name": "Email Subject",
+              "value": "={{ JSON.parse($json.text).subject }}",
+              "type": "string"
+            },
+            {
+              "id": "e8fa77d9-b52a-4fd6-83a4-298ae20deeb5",
+              "name": "Email Body",
+              "value": "={{ JSON.parse($json.text).email_body }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1648,
+        192
+      ],
+      "id": "1f8b9395-7d68-4506-9c34-29e4b7419bd6",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk",
+          "mode": "list",
+          "cachedResultName": "Appolo Construction Companies data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 392706570,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zf0_1nRnOuf4H-7T6i2zQPnSW6yPEFd1k0EGePdPHk/edit#gid=392706570"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        576,
+        192
+      ],
+      "id": "35f02d04-d9d4-4e17-9b8a-70100b946e71",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3DmFuPwNxjSlpTSr",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Scrape single URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape single URL": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f6fdf637-f563-4a4b-860a-d419b11f2050",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2337908290ce16de9b805a9e2c19b04ccd7acf2db73a6e0c1eb71f15a389dfd8"
+  },
+  "nodeGroups": [],
+  "id": "86hU5q9yEAXu29Zl",
+  "tags": []
+}
