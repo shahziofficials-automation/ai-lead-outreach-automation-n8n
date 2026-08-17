@@ -45,7 +45,19 @@ Gmail
 
 ## 📸 Workflow Preview
 
-Workflow screenshots are included in this repository.
+### Workflow 1
+
+![Workflow 1](SS1.png)
+
+### Workflow 2
+
+![Workflow 2](SS2.png)
+## 📂 Project Files
+
+- `SS1.png` — Workflow 1 screenshot
+- `SS2.png` — Workflow 2 screenshot
+- `Apollo Data MMTI Email Marketing WorkflowFlow1.json` — Workflow 1 n8n export
+- `Apollo Data MMTI Email Marketing WorkflowFlow22.json` — Workflow 2 n8n export
 
 ## 🔐 Security
 
